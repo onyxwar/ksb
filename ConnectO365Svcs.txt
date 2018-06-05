@@ -1,0 +1,27 @@
+$domainHost="girlscoutsww"
+$credential = Get-Credential
+Connect-AzureAD -Credential $credential
+Import-Module Microsoft.Online.SharePoint.PowerShell -DisableNameChecking
+Connect-SPOService -Url https://$domainHost-admin.sharepoint.com -credential $credential
+Import-Module SkypeOnlineConnector
+$sfboSession = New-CsOnlineSession -Credential $credential
+Import-PSSession $sfboSession
+$exchangeSession = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri "https://outlook.office365.com/powershell-liveid/" -Credential $credential -Authentication "Basic" -AllowRedirection
+Import-PSSession $exchangeSession
+$SccSession = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://ps.compliance.protection.outlook.com/powershell-liveid/ -Credential $credential -Authentication "Basic" -AllowRedirection
+Import-PSSession $SccSession -Prefix cc
+
+
+$acctName="ksteel@gsww.org"
+$domainHost="girlscoutsww"
+
+#Azure Active Directory
+Connect-AzureAD
+
+#SharePoint Online
+Connect-SPOService -Url https://$domainHost-admin.sharepoint.com
+
+#Skype for Business Online
+$sfboSession = New-CsOnlineSession -UserName $acctName
+
+Import-PSSession $sfboSession

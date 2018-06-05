@@ -1,0 +1,11 @@
+$mbxstats=Get-Mailbox | Get-MailboxStatistics |?{$_.TotalItemSize -lt 5Gb}
+
+PS C:\Users\katharines> Get-Mailbox -Database $oldmbx -RecipientTypeDetails sharedmailbox  | foreach {Get-MailboxStatist
+ics -Filter 'TotalItemSize -le "2*GB"'} | select DisplayName,TotalItemSize | sort DisplayName
+
+Get-MoveRequest | ?{$_.status -eq 'inprogress'}
+
+$equip | foreach {New-MoveRequest -Identity $_.Identity -TargetDatabase $gsmbx}
+
+#Use -like NOT -lt/gt/le/ge
+Get-Mailbox -Database $oldmbx | Get-MailboxStatistics | where {$_.TotalItemSize -like "1*GB*"} |  select displayname,totalitemsize
